@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 use App\Models\Users;
 
 class UsersControllers extends Controller
@@ -15,6 +17,17 @@ class UsersControllers extends Controller
     }
 
     public function createUser(Request $request){
+
+        $this->validate($request, [
+            "name" => "required",
+            "contact" => "required",
+            "email" => "required|email|unique:users",
+            "password" => "required",
+            "user_type" => "required",
+        ]);
+
+        $request->offsetSet("password",Hash::make($request->password));
+
         $user = Users::create($request->all());
         return response()->json($user,201);
     }
@@ -22,6 +35,17 @@ class UsersControllers extends Controller
     public function updateUser($id, Request $request)
     {
         $user = Users::findOrFail($id);
+
+        $this->validate($request, [
+            "name" => "required",
+            "contact" => "required",
+            "email" => "required|email",
+            "password" => "required",
+            "user_type" => "required",
+        ]);
+
+        $request->offsetSet("password",Hash::make($request->password));
+
         $user->update($request->all());
         return response()->json($user, 200);
     }
