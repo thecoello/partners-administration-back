@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\Users;
 
-class UsersControllers extends Controller
+class UsersController extends Controller
 {
     public function showAllUsers(){
         return response()->json(Users::all());
