@@ -19,10 +19,10 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     //USERS
-    $router->get('getusers',  ['uses' => 'UsersControllers@showAllUsers']);
-    $router->get('getuser/{id}', ['uses' => 'UsersControllers@showUser']);
-    $router->post('postuser', ['uses' => 'UsersControllers@createUser']);
-    $router->delete('deleteuser/{id}', ['uses' => 'UsersControllers@deteleUser']);
-    $router->put('putuser/{id}', ['uses' => 'UsersControllers@updateUser']);
+    $router->get('getusers',  ['uses' => 'UsersController@showAllUsers']);
+    $router->get('getuser/{id}', ['uses' => 'UsersController@showUser']);
+    $router->post('postuser', ['uses' => 'UsersController@createUser']);
+    $router->delete('deleteuser/{id}', ['uses' => 'UsersController@deteleUser']);
+    $router->put('putuser/{id}', ['uses' => 'UsersController@updateUser']);
 
   });
