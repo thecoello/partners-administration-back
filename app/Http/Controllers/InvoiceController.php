@@ -23,23 +23,9 @@ class InvoiceController extends Controller
     {
 
         $this->validate($request, [
-            "user_id" => "required",
-            "pricetype" => "required",
-            "company_name" => "required|email|unique:Invoice",
-            "category" => "required",
-            "location" => "required",
-            "quantity" => "required",
-            "vat" => "required",
-            "subtotal" => "required",
-            "iva" => "required",
-            "total" => "required",
-            "address" => "required",
-            "zip" => "required",
-            "country" => "required",
-            "invoice_number" => "required",
+            "invoice_number" => "required|unique:Invoice",
         ]);
 
-        $request->offsetSet("password", Hash::make($request->password));
 
         $Invoice = Invoice::create($request->all());
         return response()->json($Invoice, 201);
@@ -48,23 +34,6 @@ class InvoiceController extends Controller
     public function updateInvoice($id, Request $request)
     {
         $Invoice = Invoice::findOrFail($id);
-
-        $this->validate($request, [
-            "user_id" => "required",
-            "pricetype" => "required",
-            "company_name" => "required|email|unique:Invoice",
-            "category" => "required",
-            "location" => "required",
-            "quantity" => "required",
-            "vat" => "required",
-            "subtotal" => "required",
-            "iva" => "required",
-            "total" => "required",
-            "address" => "required",
-            "zip" => "required",
-            "country" => "required",
-            "invoice_number" => "required",
-        ]);
 
         $Invoice->update($request->all());
         return response()->json($Invoice, 200);
