@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Users extends Model
+class Packages extends Model
 {
 
     public $timestamps = false;
@@ -16,7 +16,7 @@ class Users extends Model
      * @var array
      */
     protected $fillable = [
-        "name", "contact", "email","password", "contract_file", "user_type", 
+        "pack_name", "price_normal", "price_early","price_all_normal", "price_all_early"
     ];
 
     /**

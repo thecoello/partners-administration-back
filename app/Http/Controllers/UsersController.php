@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
+
 
 use App\Models\Users;
 
@@ -23,13 +26,20 @@ class UsersController extends Controller
             "contact" => "required",
             "email" => "required|email|unique:users",
             "password" => "required",
+            "contract_file" => "required|mimes:pdf",
             "user_type" => "required",
         ]);
 
+
+        $picName = time() ."_".$request->name .'_'.'contract'.'.pdf';
+        $path = 'public/contracts/';
+        $request->file('contract_file')->move($path, $picName);
+
         $request->offsetSet("password",Hash::make($request->password));
 
+
         $user = Users::create($request->all());
-        return response()->json($user,201);
+        return response()->json($user,201); 
     }
 
     public function updateUser($id, Request $request)
