@@ -28,22 +28,22 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //PACKGES
     $router->get('getpackages',  ['uses' => 'PackagesController@showAllPackages']);
     $router->get('getpackage',  ['uses' => 'PackagesController@showPackage']);
-    $router->get('postpackage',  ['uses' => 'PackagesController@createPackage']);
-    $router->get('deletepackage',  ['uses' => 'PackagesController@detelePackage']);
-    $router->get('putpackage',  ['uses' => 'PackagesController@updatePackage']);
+    $router->post('postpackage',  ['uses' => 'PackagesController@createPackage']);
+    $router->delete('deletepackage',  ['uses' => 'PackagesController@detelePackage']);
+    $router->put('putpackage',  ['uses' => 'PackagesController@updatePackage']);
 
     //LOCATIONS
     $router->get('getlocations',  ['uses' => 'LocationsController@showAllLocations']);
     $router->get('getlocation',  ['uses' => 'LocationsController@showLocation']);
-    $router->get('postlocation',  ['uses' => 'LocationsController@createLocation']);
-    $router->get('deletelocation',  ['uses' => 'LocationsController@deteleLocation']);
-    $router->get('putlocation',  ['uses' => 'LocationsController@updateLocation']);
+    $router->post('postlocation',  ['uses' => 'LocationsController@createLocation']);
+    $router->delete('deletelocation',  ['uses' => 'LocationsController@deteleLocation']);
+    $router->put('putlocation',  ['uses' => 'LocationsController@updateLocation']);
 
     //INVOICES
-    $router->get('getinvoices',  ['uses' => 'InvoicesController@showAllInvoices']);
-    $router->get('getinvoice',  ['uses' => 'InvoicesController@showInvoice']);
-    $router->get('postinvoice',  ['uses' => 'InvoicesController@createInvoice']);
-    $router->get('deleteinvoice',  ['uses' => 'InvoicesController@deteleInvoice']);
-    $router->get('putinvoice',  ['uses' => 'InvoicesController@updateInvoice']);
+    $router->get('getinvoices',  ['uses' => 'InvoiceController@showAllInvoices']);
+    $router->get('getinvoice/{user_id}',  ['uses' => 'InvoiceController@showInvoice']);
+    $router->post('postinvoice',  ['uses' => 'InvoiceController@createInvoice']);
+    $router->delete('deleteinvoice',  ['uses' => 'InvoiceController@deteleInvoice']);
+    $router->put('putinvoice/{user_id}',  ['uses' => 'InvoiceController@updateInvoice']);
 
 });

@@ -30,15 +30,19 @@ class UsersController extends Controller
             "user_type" => "required",
         ]);
 
+        $request->file('contract_file')->move('public/contracts/', time() ."_".$request->name .'_'.'contract'.'.pdf');
 
-        $picName = time() ."_".$request->name .'_'.'contract'.'.pdf';
-        $path = 'public/contracts/';
-        $request->file('contract_file')->move($path, $picName);
-
-        $request->offsetSet("password",Hash::make($request->password));
-
-
-        $user = Users::create($request->all());
+        $userRequest = [
+            "name" => $request->name,
+            "contact" => $request->contact,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "contract_file" => 'public/contracts/'. time() ."_".$request->name .'_'.'contract'.'.pdf',
+            "user_type" => $request->user_type,
+        ];
+        
+        
+        $user = Users::create($userRequest);
         return response()->json($user,201); 
     }
 

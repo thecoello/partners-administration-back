@@ -5,35 +5,41 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-use App\Models\Invoice;
+use App\Models\Invoices;
 
 class InvoiceController extends Controller
 {
     public function showAllInvoices()
     {
-        return response()->json(Invoice::all());
+        return response()->json(Invoices::all());
     }
 
-    public function showInvoice($id)
+    public function showInvoice($user_id)
     {
-        return response()->json(Invoice::find($id));
+        $invoice = Invoices::where('user_id', $user_id)->first();
+
+        return response()->json($invoice);
     }
 
     public function createInvoice(Request $request)
     {
 
         $this->validate($request, [
-            "invoice_number" => "required|unique:Invoice",
+            "user_id" => "required|unique:Invoices",
         ]);
 
 
-        $Invoice = Invoice::create($request->all());
+        $Invoice = Invoices::create($request->all());
         return response()->json($Invoice, 201);
     }
 
     public function updateInvoice($id, Request $request)
     {
-        $Invoice = Invoice::findOrFail($id);
+        $Invoice = Invoices::findOrFail($id);
+
+        $this->validate($request, [
+            "user_id" => "required|unique:Invoice",
+        ]);
 
         $Invoice->update($request->all());
         return response()->json($Invoice, 200);
@@ -41,7 +47,7 @@ class InvoiceController extends Controller
 
     public function deteleInvoice($id)
     {
-        Invoice::findOrFail($id)->delete();
+        Invoices::findOrFail($id)->delete();
         return response('Deleted Successfully', 200);
     }
 }
