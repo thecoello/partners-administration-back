@@ -21,6 +21,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //USERS
     $router->get('getusers',  ['uses' => 'UsersController@showAllUsers']);
     $router->get('getuser/{id}', ['uses' => 'UsersController@showUser']);
+    $router->get('getusersinvoices', ['uses' => 'UsersController@showAllUsersInvoices']);
     $router->post('postuser', ['uses' => 'UsersController@createUser']);
     $router->delete('deleteuser/{id}', ['uses' => 'UsersController@deteleUser']);
     $router->put('putuser/{id}', ['uses' => 'UsersController@updateUser']);
@@ -34,7 +35,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //LOCATIONS
     $router->get('getlocations',  ['uses' => 'LocationsController@showAllLocations']);
-    $router->get('getlocation',  ['uses' => 'LocationsController@showLocation']);
+    $router->get('getlocation/{id}',  ['uses' => 'LocationsController@showLocation']);
     $router->post('postlocation',  ['uses' => 'LocationsController@createLocation']);
     $router->delete('deletelocation',  ['uses' => 'LocationsController@deteleLocation']);
     $router->put('putlocation',  ['uses' => 'LocationsController@updateLocation']);
@@ -43,7 +44,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('getinvoices',  ['uses' => 'InvoiceController@showAllInvoices']);
     $router->get('getinvoice/{user_id}',  ['uses' => 'InvoiceController@showInvoice']);
     $router->post('postinvoice',  ['uses' => 'InvoiceController@createInvoice']);
-    $router->delete('deleteinvoice',  ['uses' => 'InvoiceController@deteleInvoice']);
+    $router->delete('deleteinvoice/{user_id}',  ['uses' => 'InvoiceController@deteleInvoice']);
     $router->put('putinvoice/{user_id}',  ['uses' => 'InvoiceController@updateInvoice']);
 
 });

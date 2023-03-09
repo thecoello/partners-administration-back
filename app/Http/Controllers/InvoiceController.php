@@ -28,26 +28,21 @@ class InvoiceController extends Controller
             "user_id" => "required|unique:Invoices",
         ]);
 
-
         $Invoice = Invoices::create($request->all());
         return response()->json($Invoice, 201);
     }
 
-    public function updateInvoice($id, Request $request)
+    public function updateInvoice($user_id, Request $request)
     {
-        $Invoice = Invoices::findOrFail($id);
-
-        $this->validate($request, [
-            "user_id" => "required|unique:Invoice",
-        ]);
+        $Invoice = Invoices::where('user_id', $user_id)->first();
 
         $Invoice->update($request->all());
         return response()->json($Invoice, 200);
     }
 
-    public function deteleInvoice($id)
+    public function deteleInvoice($user_id)
     {
-        Invoices::findOrFail($id)->delete();
+        Invoices::where('user_id', $user_id)->first()->delete();
         return response('Deleted Successfully', 200);
     }
 }
