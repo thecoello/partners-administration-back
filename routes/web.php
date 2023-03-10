@@ -28,7 +28,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //PACKGES
     $router->get('getpackages',  ['uses' => 'PackagesController@showAllPackages']);
-    $router->get('getpackage',  ['uses' => 'PackagesController@showPackage']);
+    $router->get('getpackage/{id}',  ['uses' => 'PackagesController@showPackage']);
     $router->post('postpackage',  ['uses' => 'PackagesController@createPackage']);
     $router->delete('deletepackage',  ['uses' => 'PackagesController@detelePackage']);
     $router->put('putpackage',  ['uses' => 'PackagesController@updatePackage']);
@@ -46,5 +46,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('postinvoice',  ['uses' => 'InvoiceController@createInvoice']);
     $router->delete('deleteinvoice/{user_id}',  ['uses' => 'InvoiceController@deteleInvoice']);
     $router->put('putinvoice/{user_id}',  ['uses' => 'InvoiceController@updateInvoice']);
+    $router->put('putinvoicedetails/{user_id}',  ['uses' => 'InvoiceController@updateInvoiceDetails']);
+
+    
+    //EVENT INFO
+    $router->get('eventinfo',  ['uses' => 'EventController@showAllEvents']);
+    $router->get('puteventinfo/{id}',  ['uses' => 'EventController@updateEvent']);
+
+
+
 
 });

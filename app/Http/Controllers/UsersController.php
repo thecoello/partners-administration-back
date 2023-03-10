@@ -9,6 +9,8 @@ use Illuminate\Http\File;
 use App\Models\Invoices;
 use App\Models\Users;
 use App\Models\Locations;
+use App\Models\Packages;
+
 
 class UsersController extends Controller
 {
@@ -33,24 +35,61 @@ class UsersController extends Controller
             "email" => "",
             "user_type" => "",
             "contract_file" => "",
-            "location" => ""
+            "location" => "",
+            "pricetype" => "",
+            "company_name" => "",
+            "category" => "",
+            "quantity" => "",
+            "vat" => "",
+            "subtotal" => "",
+            "iva" => "",
+            "total" => "",
+            "address" => "",
+            "zip" => "",
+            "country" => "",
+            "invoice_number" => "",
+            "payment_status" => "",
+            "payment_method" => "",
+            "invoice_date" => ""
         ];
 
         $users = Users::all();
         
         foreach ($users as $key => $user) {
             $userInvoice["id"] = $user->id;
-            $userInvoice["contact"] = $user->contact;
             $userInvoice["name"] = $user->name;
+            $userInvoice["contact"] = $user->contact;
             $userInvoice["email"] = $user->email;
             $userInvoice["user_type"] = $user->user_type;
             $userInvoice["contract_file"] = $user->contract_file;
-            
             $Invoice = Invoices::where('user_id', $user->id)->first();
-
             $Location = Locations::where('id', $Invoice->location)->first();
             $userInvoice["location"] = $Location->location_name;
-            
+
+            if($Invoice->pricetype == 1){
+                $userInvoice["pricetype"] = "Regular";
+            }elseif ($Invoice->pricetype == 2) {
+                $userInvoice["pricetype"] = "Early bird";
+            }
+
+            $userInvoice["company_name"] = $Invoice->company_name;
+            $Location = Locations::where('id', $Invoice->location)->first();
+            $Category = Packages::where('id', $Invoice->category)->first();
+            $userInvoice["category"] = $Category->pack_name;
+            $userInvoice["quantity"] = $Invoice->quantity;
+            $userInvoice["vat"] = $Invoice->vat;
+            $userInvoice["subtotal"] = $Invoice->subtotal;
+            $userInvoice["iva"] = $Invoice->iva;
+            $userInvoice["total"] = $Invoice->total;
+            $userInvoice["address"] = $Invoice->address;
+            $userInvoice["zip"] = $Invoice->zip;
+            $userInvoice["country"] = $Invoice->country;
+            $userInvoice["invoice_number"] = $Invoice->invoice_number;
+            $userInvoice["payment_status"] = $Invoice->payment_status;
+            $userInvoice["payment_method"] = $Invoice->payment_method;
+            $userInvoice["invoice_date"] = $Invoice->invoice_date;
+
+
             array_push($allUsersInvoice, $userInvoice);
         }
         

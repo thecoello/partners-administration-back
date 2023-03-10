@@ -40,6 +40,14 @@ class InvoiceController extends Controller
         return response()->json($Invoice, 200);
     }
 
+    public function updateInvoiceDetails($user_id, Request $request)
+    {
+        $Invoice = Invoices::where('user_id', $user_id)->first();
+
+        $Invoice->update($request->all());
+        return response()->json($Invoice, 200);
+    }
+
     public function deteleInvoice($user_id)
     {
         Invoices::where('user_id', $user_id)->first()->delete();
