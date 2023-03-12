@@ -38,7 +38,7 @@ class Authenticate
         if ($this->auth->guard($guard)->guest()) {
             return response('Unauthorized.', 401);
         }
-
+        response('logged',200);
         return $next($request);
     }
 }

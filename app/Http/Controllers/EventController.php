@@ -8,21 +8,32 @@ use App\Models\EventInfo;
 
 class EventController extends Controller
 {
-    public function showAllEvents()
+    public function showAllEvents(Request $request)
     {
-        return response()->json(EventInfo::all());
+        $cookie = $request->cookie('lumen_session');        
+        $session = $request->session($cookie);
+
+        if($session->get('key')){
+            return response()->json(EventInfo::all());
+        }
+        return response('Unauthorized.', 401);
+
     }
 
   
     public function updateEvent($id, Request $request)
     {
-        $Events = EventInfo::all();
-       
-        $request->offsetSet("invoice_number", $Events[0]->invoice_number+1);
+        $cookie = $request->cookie('lumen_session');        
+        $session = $request->session($cookie);
 
-        $Events[0]->update($request->all());
-        
-        return response()->json($Events, 200); 
+        if($session->get('key')){
+            $Events = EventInfo::all();
+            $request->offsetSet("invoice_number", $Events[0]->invoice_number+1);
+            $Events[0]->update($request->all());
+            return response()->json($Events, 200); 
+        }
+        return response('Unauthorized.', 401);
+
     }
 
 }
