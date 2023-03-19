@@ -35,13 +35,12 @@ class InvoiceController extends Controller
 
         $cookie = $request->cookie('lumen_session');
         $session = $request->session($cookie);
+
         if ($session->get('key')) {
             $this->validate($request, [
-                "user_id" => "required|unique:Invoices",
+                "user_id" => "required",
             ]);
-
-            $Invoice = Invoices::create($request->all());
-            return response()->json($Invoice, 201);
+            return response()->json(Invoices::create($request->all()), 200);
         }
         return response('Unauthorized.', 401);
     }

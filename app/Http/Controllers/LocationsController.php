@@ -43,7 +43,7 @@ class LocationsController extends Controller
             ]);
 
             $Location = Locations::create($request->all());
-            return response()->json($Location, 201);
+            return response()->json($Location, 200);
         }
         return response('Unauthorized.', 401);
     }

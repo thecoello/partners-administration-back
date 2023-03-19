@@ -45,7 +45,7 @@ class PackagesController extends Controller
             ]);
 
             $Package = Packages::create($request->all());
-            return response()->json($Package, 201);
+            return response()->json($Package, 200);
         }
         return response('Unauthorized.', 401);
     }
