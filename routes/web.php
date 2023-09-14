@@ -17,63 +17,36 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-/* $router->get('/', function () use ($router) {
-    return $router->app->version();
-}); */
 
-$router->post('/', ['middleware' => ['auth'], function (Request $request) use ($router) {
-
-    $user = Auth::user();
-    $user = $request->user();
-    $request->session()->put('key', $user->id);
-    $response = [
-        'name' => $user->id,
-        'id' => $user->id,
-        'user_type' => $user->user_type,
-        'token' => strval($request->cookie('lumen_session'))
-    ];
-
-
-    return response()->json($response,200);
-
-}]);
 
 $router->group(['prefix' => '/'], function () use ($router) {
 
     //USERS
-    $router->get('/api/getusers',  ['uses' => 'UsersController@showAllUsers']);
-    $router->get('/api/getuser/{id}', ['uses' => 'UsersController@showUser']);
-    $router->get('/api/getusersinvoices', ['uses' => 'UsersController@showAllUsersInvoices']);
-    $router->get('/api/getuserinvoice/{id}', ['uses' => 'UsersController@showUserInvoice']);
-    $router->get('/',  ['uses' => 'UsersController@loginCheck']);
-    $router->post('/logout',  ['uses' => 'UsersController@logOut']);
-
-    $router->post('/api/postuser', ['uses' => 'UsersController@createUser']);
-    $router->delete('/api/deleteuser/{id}', ['uses' => 'UsersController@deteleUser']);
-    $router->put('/api/putuser/{id}', ['uses' => 'UsersController@updateUser']);
+    $router->get('/api/users',  ['uses' => 'UsersController@getUsers']);
+    $router->get('/api/users/{id}', ['uses' => 'UsersController@getUser']);
+    $router->post('/api/users', ['uses' => 'UsersController@postUser']);
+    $router->put('/api/users/{id}', ['uses' => 'UsersController@updateUser']);
+    $router->delete('/api/users/{id}', ['uses' => 'UsersController@deteleUser']);
 
     //PACKGES
-    $router->get('/api/getpackages',  ['uses' => 'PackagesController@showAllPackages']);
-    $router->get('/api/getpackage/{id}',  ['uses' => 'PackagesController@showPackage']);
-    $router->post('/api/postpackage',  ['uses' => 'PackagesController@createPackage']);
-    $router->delete('/api/deletepackage',  ['uses' => 'PackagesController@detelePackage']);
-    $router->put('/api/putpackage',  ['uses' => 'PackagesController@updatePackage']);
+    $router->get('/api/packages',  ['uses' => 'PackagesController@getPackages']);
+    $router->post('/api/packages',  ['uses' => 'PackagesController@postPackages']);
+    $router->put('/api/packages/{id}',  ['uses' => 'PackagesController@updatePackages']);
+    $router->delete('/api/packages/{id}',  ['uses' => 'PackagesController@deletePackages']);
 
     //LOCATIONS
-    $router->get('/api/getlocations',  ['uses' => 'LocationsController@showAllLocations']);
-    $router->get('/api/getlocation/{id}',  ['uses' => 'LocationsController@showLocation']);
-    $router->post('/api/postlocation',  ['uses' => 'LocationsController@createLocation']);
-    $router->delete('/api/deletelocation',  ['uses' => 'LocationsController@deteleLocation']);
-    $router->put('/api/putlocation',  ['uses' => 'LocationsController@updateLocation']);
+    $router->get('/api/locations',  ['uses' => 'LocationsController@getLocations']);
+    $router->post('/api/locations',  ['uses' => 'LocationsController@postLocations']);
+    $router->put('/api/locations/{id}',  ['uses' => 'LocationsController@updateLocations']);
+    $router->delete('/api/locations/{id}',  ['uses' => 'LocationsController@deleteLocations']);
 
     //INVOICES
-    $router->get('/api/getinvoices',  ['uses' => 'InvoiceController@showAllInvoices']);
-    $router->get('/api/getinvoice/{user_id}',  ['uses' => 'InvoiceController@showInvoice']);
-    $router->post('/api/postinvoice',  ['uses' => 'InvoiceController@createInvoice']);
-    $router->delete('/api/deleteinvoice/{user_id}',  ['uses' => 'InvoiceController@deteleInvoice']);
-    $router->put('/api/putinvoice/{user_id}',  ['uses' => 'InvoiceController@updateInvoice']);
-    $router->put('/api/putinvoicedetails/{user_id}',  ['uses' => 'InvoiceController@updateInvoiceDetails']);
-    $router->put('/api/putpaymentsatus/{user_id}',  ['uses' => 'InvoiceController@updatePaymentStatus']);
+    $router->get('/api/invoices',  ['uses' => 'InvoiceController@getInvoices']);
+    $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoice']);
+    $router->post('/api/invoices',  ['uses' => 'InvoiceController@postInvoice']);
+    $router->put('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
+    $router->put('/api/invoices/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
+    $router->delete('/api/invoices/{id}',  ['uses' => 'InvoiceController@deleteInvoices']);
 
     //EVENT INFO
     $router->get('/api/eventinfo',  ['uses' => 'EventController@showAllEvents']);

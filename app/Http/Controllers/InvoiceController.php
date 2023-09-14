@@ -1,97 +1,55 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-
-use App\Models\Invoices;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
-    public function showAllInvoices(Request $request)
+    public function getInvoices()
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            return response()->json(Invoices::all());
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::select('SELECT invoices.*, users.name, users.contact, users.email, users.contract_file FROM invoices LEFT JOIN users ON invoices.user_id = users.id');
+        return $result;
     }
 
-    public function showInvoice($user_id, Request $request)
+    public function getInvoice($id)
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $invoice = Invoices::where('user_id', $user_id)->first();
-            return response()->json($invoice);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::select('SELECT invoices.*, users.name, users.contact, users.email, users.contract_file FROM invoices LEFT JOIN users ON invoices.user_id = users.id WHERE invoices.id = ' . $id . '');
+        return $result;
     }
 
-    public function createInvoice(Request $request)
+    public function postInvoice(Request $request)
     {
+        $this->validate($request, [
+            "user_id" => "required",
+            "category" => "required",
+            "location" => "required",
+            "pricetype" => "required",
+            "subtotal" => "required",
+            "invoice_number" => "required",
+        ]);
 
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-
-        if ($session->get('key')) {
-            $this->validate($request, [
-                "user_id" => "required",
-            ]);
-            return response()->json(Invoices::create($request->all()), 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('invoices')->insert($request->all());
+        return $result;
     }
 
-    public function updateInvoice($user_id, Request $request)
+    public function putInvoices($id, Request $request)
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $Invoice = Invoices::where('user_id', $user_id)->first();
-
-            $Invoice->update($request->all());
-            return response()->json($Invoice, 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('invoices')->where('id', $id)->update(request()->all());
+        return $result;
     }
 
-    public function updateInvoiceDetails($user_id, Request $request)
+    public function putInvoicesUser($id, Request $request)
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $Invoice = Invoices::where('user_id', $user_id)->first();
+        $this->validate($request, [
+            "company_name" => "required",
+            "address" => "required",
+            "zip" => "required",
+            "country" => "required",
+            "vat" => "required",              
+        ]);
 
-            $Invoice->update($request->all());
-            return response()->json($Invoice, 200);
-        }
-        return response('Unauthorized.', 401);
-    }
-
-    public function updatePaymentStatus($user_id, Request $request)
-    {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $Invoice = Invoices::where('user_id', $user_id)->first();
-
-            $Invoice->update($request->all());
-            return response()->json($Invoice, 200);
-        }
-        return response('Unauthorized.', 401);
-    }
-
-    public function deteleInvoice($user_id, Request $request)
-    {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            Invoices::where('user_id', $user_id)->first()->delete();
-            return response('Deleted Successfully', 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('invoices')->where('id', $id)->update(request()->all());
+        return $result;
     }
 }

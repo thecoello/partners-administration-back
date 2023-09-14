@@ -5,80 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Packages;
+use Illuminate\Support\Facades\DB;
 
 class PackagesController extends Controller
 {
-    public function showAllPackages(Request $request)
+    public function getPackages()
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-        return response()->json(Packages::all());
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('packages')->select('*')->get();
+        return $result;
     }
 
-    public function showPackage($id, Request $request)
+    public function postPackages(Request $request)
     {
+        $this->validate($request, [
+            "pack_name" => "required",
+            "price_normal" => "required",
+            "price_early" => "required",
+            "price_all_normal" => "required",
+            "price_all_early" => "required",
+        ]);
 
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            return response()->json(Packages::find($id));
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('packages')->insert($request->all());
+        return $result;
     }
 
-    public function createPackage(Request $request)
+    public function updatePackages($id, Request $request)
     {
-
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-
-            $this->validate($request, [
-                "pack_name" => "required",
-                "price_normal" => "required",
-                "price_early" => "required",
-                "price_all_early" => "required",
-                "Package_type" => "required",
-            ]);
-
-            $Package = Packages::create($request->all());
-            return response()->json($Package, 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('packages')->where('id', $id)->update(request()->all());
+        return $result;
     }
 
-    public function updatePackage($id, Request $request)
+    public function deletePackages($id)
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $Package = Packages::findOrFail($id);
-
-            $this->validate($request, [
-                "pack_name" => "required",
-                "price_normal" => "required",
-                "price_early" => "required",
-                "price_all_early" => "required",
-                "Package_type" => "required",
-            ]);
-
-            $Package->update($request->all());
-            return response()->json($Package, 200);
-        }
-        return response('Unauthorized.', 401);
-    }
-
-    public function detelePackage($id, Request $request)
-    {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            Packages::findOrFail($id)->delete();
-            return response('Deleted Successfully', 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('packages')->delete($id);
+        return $result;
     }
 }

@@ -82,10 +82,10 @@ $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
 ]);
 
-$app->middleware([
+/* $app->middleware([
     App\Http\Middleware\CorsMiddleware::class,
     Illuminate\Session\Middleware\StartSession::class
-]);
+]); */
 
 $app->singleton(Illuminate\Session\SessionManager::class, function () use ($app) {
     return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session');

@@ -1,84 +1,36 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
-use App\Models\Locations;
+use Illuminate\Support\Facades\DB;
 
 class LocationsController extends Controller
 {
-    public function showAllLocations(Request $request)
+    public function getLocations()
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            return response()->json(Locations::all());
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('locations')->select('*')->get();
+        return $result;
     }
 
-    public function showLocation($id, Request $request)
+    public function postLocations(Request $request)
     {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            return response()->json(Locations::find($id));
-        }
-        return response('Unauthorized.', 401);
+        $this->validate($request, [
+            "location_name" => "required",
+        ]);
+
+        $result = DB::table('locations')->insert($request->all());
+        return $result;
     }
 
-    public function createLocation(Request $request)
+    public function updateLocations($id, Request $request)
     {
-
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $this->validate($request, [
-                "pack_name" => "required",
-                "price_normal" => "required",
-                "price_early" => "required",
-                "price_all_early" => "required",
-                "Location_type" => "required",
-            ]);
-
-            $Location = Locations::create($request->all());
-            return response()->json($Location, 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('locations')->where('id', $id)->update(request()->all());
+        return $result;
     }
 
-    public function updateLocation($id, Request $request)
+    public function deleteLocations($id)
     {
-
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            $Location = Locations::findOrFail($id);
-
-            $this->validate($request, [
-                "pack_name" => "required",
-                "price_normal" => "required",
-                "price_early" => "required",
-                "price_all_early" => "required",
-                "Location_type" => "required",
-            ]);
-
-
-            $Location->update($request->all());
-            return response()->json($Location, 200);
-        }
-        return response('Unauthorized.', 401);
-    }
-
-    public function deteleLocation($id, Request $request)
-    {
-        $cookie = $request->cookie('lumen_session');
-        $session = $request->session($cookie);
-        if ($session->get('key')) {
-            Locations::findOrFail($id)->delete();
-            return response('Deleted Successfully', 200);
-        }
-        return response('Unauthorized.', 401);
+        $result = DB::table('locations')->delete($id);
+        return $result;
     }
 }
