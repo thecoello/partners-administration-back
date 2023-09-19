@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-
-
 $router->group(['prefix' => '/'], function () use ($router) {
 
     //USERS

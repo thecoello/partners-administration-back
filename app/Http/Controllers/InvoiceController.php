@@ -8,13 +8,15 @@ class InvoiceController extends Controller
 {
     public function getInvoices()
     {
-        $result = DB::select('SELECT invoices.*, users.name, users.contact, users.email, users.contract_file FROM invoices LEFT JOIN users ON invoices.user_id = users.id');
+        $result = DB::table('invoices')->leftJoin('users','invoices.user_id','=','users.id')->select()->where('invoice_number','!=','null')->orderBy('invoices.invoice_number','asc')->simplePaginate(15);
+
         return $result;
     }
 
     public function getInvoice($id)
     {
-        $result = DB::select('SELECT invoices.*, users.name, users.contact, users.email, users.contract_file FROM invoices LEFT JOIN users ON invoices.user_id = users.id WHERE invoices.id = ' . $id . '');
+        $result = DB::table('invoices')->leftJoin('users','invoices.user_id','=','users.id')->where('invoices.id','=',$id)->where('invoice_number','!=','null');
+
         return $result;
     }
 
