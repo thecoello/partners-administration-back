@@ -39,7 +39,8 @@ $router->group(['prefix' => '/'], function () use ($router) {
     $router->delete('/api/locations/{id}',  ['uses' => 'LocationsController@deleteLocations']);
 
     //INVOICES
-    $router->get('/api/invoices',  ['uses' => 'InvoiceController@getInvoices']);
+    $router->get('/api/invoices/',  ['uses' => 'InvoiceController@getInvoices']);
+    $router->get('/api/invoices/search/{search}',  ['uses' => 'InvoiceController@getInvoicesSearch']);
     $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoice']);
     $router->post('/api/invoices',  ['uses' => 'InvoiceController@postInvoice']);
     $router->put('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
