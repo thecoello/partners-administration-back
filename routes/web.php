@@ -21,6 +21,7 @@ $router->group(['prefix' => '/'], function () use ($router) {
 
     //USERS
     $router->get('/api/users',  ['uses' => 'UsersController@getUsers']);
+    $router->get('/api/users/search/{search}',  ['uses' => 'UsersController@getUserSearch']);
     $router->get('/api/users/{id}', ['uses' => 'UsersController@getUser']);
     $router->post('/api/users', ['uses' => 'UsersController@postUser']);
     $router->put('/api/users/{id}', ['uses' => 'UsersController@updateUser']);

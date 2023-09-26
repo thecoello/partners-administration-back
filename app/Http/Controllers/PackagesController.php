@@ -11,7 +11,11 @@ class PackagesController extends Controller
 {
     public function getPackages()
     {
-        $result = DB::table('packages')->select('*')->get();
+        
+        $packs = DB::table('packages')->select('*')->get();
+        $locations = DB::table('locations')->select('*')->get();
+
+        $result = ['packinfo'=>$packs, 'locations'=>$locations];
         return $result;
     }
 

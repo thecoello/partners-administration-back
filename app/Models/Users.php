@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
 
 class Users extends Model
 {
@@ -16,7 +16,7 @@ class Users extends Model
      * @var array
      */
     protected $fillable = [
-        "name", "contact", "email","password", "contract_file", "user_type", 
+        "name", "contact", "email","password", "user_type", 
     ];
 
     /**

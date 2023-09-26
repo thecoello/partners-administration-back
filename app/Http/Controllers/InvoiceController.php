@@ -68,6 +68,9 @@ class InvoiceController extends Controller
             "invoice_number" => "required",
         ]);
 
+        $request->file('contract_file')->move('public/contracts/', time() . "_" . $request->name . '_' . 'contract' . '.pdf');
+
+
         $result = DB::table('invoices')->insert($request->all());
         return $result;
     }
