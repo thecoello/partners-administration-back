@@ -17,20 +17,20 @@ class UsersController extends Controller
 
     public function getUsers()
     {
-        return DB::table('users')->select('id','name','contact','email','user_type')->simplePaginate(15);
+        return DB::table("users")->select("id","name","contact","email","user_type")->simplePaginate(15);
 
     }
 
     public function getUser($id)
     {
-        $result = DB::table('users')->select('id','name','contact','email','user_type')->where('id', $id)->get();
+        $result = DB::table("users")->select("id","name","contact","email","user_type")->where("id", $id)->get();
         return  $result;
     }
 
     public function getUserSearch($search)
     {      
-        $result =  DB::table('users')->where('users.contact','like','%'.$search.'%')->orWhere('users.name','like','%'.$search.'%')->orWhere('users.email','like','%'.$search.'%')->select(
-        "name","contact","email","user_type")->simplePaginate(15);
+        $result =  DB::table("users")->where("users.contact","like","%".$search."%")->orWhere("users.name","like","%".$search."%")->orWhere("users.email","like","%".$search."%")->select(
+        "id","name","contact","email","user_type")->simplePaginate(15);
 
         if($result){
             return $result;
@@ -57,20 +57,20 @@ class UsersController extends Controller
             "user_type" => $request->user_type,
         ];
 
-        $result = DB::table('users')->insert($userRequest);
+        $result = DB::table("users")->insert($userRequest);
         return $result;
     }
 
     public function updateUser($id, Request $request)
     {
-        $request['password'] = Hash::make($request->password);
-        $result = DB::table('users')->where('id', $id)->update(request()->all());
+        $request["password"] = Hash::make($request->password);
+        $result = DB::table("users")->where("id", $id)->update(request()->all());
         return $result;
     }
 
     public function deteleUser($id)
     {
-        $result = DB::table('users')->delete($id);
+        $result = DB::table("users")->delete($id);
         return $result;
     }
 }
