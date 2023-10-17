@@ -59,6 +59,7 @@ class InvoiceController extends Controller
 
     public function postInvoice(Request $request)
     {
+
         $this->validate($request, [
             "user_id" => "required",
             "category" => "required",
@@ -69,6 +70,21 @@ class InvoiceController extends Controller
         ]);
 
         $request->file('contract_file')->move('public/contracts/', time() . "_" . $request->name . '_' . 'contract' . '.pdf');
+
+
+        $eventInfo = DB::table('eventinfos')->get('eventinfos.invoice_number');
+
+        $invoiceRequest = [
+            "user_id" => $request->user_id,
+            "category" => $request->category,
+            "location" => $request->location,
+            "pricetype" => $request->pricetype,
+            "subtotal" => $request->subtotal,
+            "invoice_number" => $eventInfo->invoice_number
+        ];
+
+
+        DB::table('eventinfos')->update(array('invoice_number'=>($eventInfo->invoice_number + 1)));
 
 
         $result = DB::table('invoices')->insert($request->all());
