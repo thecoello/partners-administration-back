@@ -4,12 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Users;
-use App\Models\Invoices;
-use App\Models\Locations;
-use App\Models\Packages;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Input\Input;
 
 
 class UsersController extends Controller
@@ -17,20 +12,19 @@ class UsersController extends Controller
 
     public function getUsers()
     {
-        return DB::table("users")->select("id","name","contact","email","user_type")->simplePaginate(15);
-
+        return DB::table("users")->select("id","name","contact","email","user_type")->orderBy("id", "desc")->simplePaginate(15);
     }
 
     public function getUser($id)
     {
-        $result = DB::table("users")->select("id","name","contact","email","user_type")->where("id", $id)->get();
+        $result = DB::table("users")->select("id","name","contact","email","user_type")->where("id", $id)->orderBy("id", "desc")->get();
         return  $result;
     }
 
     public function getUserSearch($search)
     {      
         $result =  DB::table("users")->where("users.contact","like","%".$search."%")->orWhere("users.name","like","%".$search."%")->orWhere("users.email","like","%".$search."%")->select(
-        "id","name","contact","email","user_type")->simplePaginate(15);
+        "id","name","contact","email","user_type")->orderBy("id", "desc")->simplePaginate(15);
 
         if($result){
             return $result;

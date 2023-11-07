@@ -27,6 +27,15 @@ $router->group(['prefix' => '/'], function () use ($router) {
     $router->put('/api/users/{id}', ['uses' => 'UsersController@updateUser']);
     $router->delete('/api/users/{id}', ['uses' => 'UsersController@deteleUser']);
 
+    //INVOICES
+    $router->get('/api/invoices/',  ['uses' => 'InvoiceController@getInvoices']);
+    $router->get('/api/invoices/search/{search}',  ['uses' => 'InvoiceController@getInvoicesSearch']);
+    $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoice']);
+    $router->post('/api/invoices',  ['uses' => 'InvoiceController@postInvoice']);
+    $router->put('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
+    $router->put('/api/invoices/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
+    $router->delete('/api/invoices/{id}',  ['uses' => 'InvoiceController@deleteInvoices']);
+
     //PACKGES
     $router->get('/api/packages',  ['uses' => 'PackagesController@getPackages']);
     $router->post('/api/packages',  ['uses' => 'PackagesController@postPackages']);
@@ -38,15 +47,6 @@ $router->group(['prefix' => '/'], function () use ($router) {
     $router->post('/api/locations',  ['uses' => 'LocationsController@postLocations']);
     $router->put('/api/locations/{id}',  ['uses' => 'LocationsController@updateLocations']);
     $router->delete('/api/locations/{id}',  ['uses' => 'LocationsController@deleteLocations']);
-
-    //INVOICES
-    $router->get('/api/invoices/',  ['uses' => 'InvoiceController@getInvoices']);
-    $router->get('/api/invoices/search/{search}',  ['uses' => 'InvoiceController@getInvoicesSearch']);
-    $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoice']);
-    $router->post('/api/invoices',  ['uses' => 'InvoiceController@postInvoice']);
-    $router->put('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
-    $router->put('/api/invoices/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
-    $router->delete('/api/invoices/{id}',  ['uses' => 'InvoiceController@deleteInvoices']);
 
     //EVENT INFO
     $router->get('/api/eventinfo',  ['uses' => 'EventController@showAllEvents']);

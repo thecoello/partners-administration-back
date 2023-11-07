@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Input\Input;
 
 class InvoiceController extends Controller
 {
@@ -16,7 +14,7 @@ class InvoiceController extends Controller
         $event = DB::table('eventinfos')->get();
 
         $invoices =  DB::table('invoices')->where('invoices.invoice_number','!=','null')->leftJoin('packages','invoices.category','=','packages.id')->leftJoin('users','invoices.user_id','=','users.id')->leftJoin('locations','invoices.location','=','locations.id')->select(
-        "pricetype","company_name","pack_name","location_name","quantity","vat","subtotal","iva","total","address","zip","country","invoice_number","payment_status","payment_method","invoice_date","name","contact","email","contract_file")->orderBy('invoices.invoice_number','asc')->simplePaginate(15);
+        "invoices.id","pricetype","company_name","category","location","quantity","vat","subtotal","iva","total","address","zip","country","invoice_number","payment_status","payment_method","invoice_date","name","contact","email","contract_file")->orderBy('invoices.invoice_number','asc')->simplePaginate(15);
 
         if($event && $invoices){
             return response()->json(['eventinfo' => $event, 'invoices' => $invoices]);
@@ -60,19 +58,28 @@ class InvoiceController extends Controller
     public function postInvoice(Request $request)
     {
 
+        $eventInfo = DB::table('eventinfos')->get();
+
         $this->validate($request, [
             "user_id" => "required",
             "category" => "required",
             "location" => "required",
             "pricetype" => "required",
             "subtotal" => "required",
-            "invoice_number" => "required",
+            "contract_file" => "required"
         ]);
 
         $request->file('contract_file')->move('public/contracts/', time() . "_" . $request->name . '_' . 'contract' . '.pdf');
 
+        $iva = 0;
+        $total = 0;
 
-        $eventInfo = DB::table('eventinfos')->get('eventinfos.invoice_number');
+        if($request->country === "Spain"){
+            $iva = (((float)$request->subtotal * (int)$eventInfo[0]->iva)/100);
+            $total = (float)$request->subtotal + $iva;
+        }else{
+            $total = (float)$request->subtotal;  
+        }
 
         $invoiceRequest = [
             "user_id" => $request->user_id,
@@ -80,14 +87,20 @@ class InvoiceController extends Controller
             "location" => $request->location,
             "pricetype" => $request->pricetype,
             "subtotal" => $request->subtotal,
-            "invoice_number" => $eventInfo->invoice_number
+            "iva" => $iva,
+            "total" => $total,       
+            "invoice_number" => $eventInfo[0]->invoice_pre . $eventInfo[0]->invoice_number,
+            "contract_file" => 'public/contracts/' . time() . "_" . $request->name . '_' . 'contract' . '.pdf',
+            "company_name" => $request->company_name,
+            "address" => $request->address,
+            "zip" => $request->zip,
+            "country" => $request->country,
+            "vat" => $request->vat
         ];
 
+        DB::table('eventinfos')->update(array('invoice_number'=>($eventInfo[0]->invoice_number + 1)));
 
-        DB::table('eventinfos')->update(array('invoice_number'=>($eventInfo->invoice_number + 1)));
-
-
-        $result = DB::table('invoices')->insert($request->all());
+        $result = DB::table('invoices')->insert($invoiceRequest);
         return $result;
     }
 
