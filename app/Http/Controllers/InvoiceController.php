@@ -29,7 +29,7 @@ class InvoiceController extends Controller
         $event = DB::table('eventinfos')->get();
 
         $invoices =  DB::table('invoices')->where('invoices.id','=',$id)->leftJoin('packages','invoices.category','=','packages.id')->leftJoin('users','invoices.user_id','=','users.id')->leftJoin('locations','invoices.location','=','locations.id')->select(
-        "pricetype","company_name","pack_name","location_name","quantity","vat","subtotal","iva","total","address","zip","country","invoice_number","payment_status","payment_method","invoice_date","name","contact","email","contract_file")->orderBy('invoices.invoice_number','asc')->simplePaginate(15);
+        "pricetype","company_name","category","location","quantity","vat","subtotal","iva","total","address","zip","country","invoice_number","payment_status","payment_method","invoice_date","name","contact","email","contract_file")->orderBy('invoices.invoice_number','asc')->simplePaginate(15);
 
         if($event && $invoices){
             return response()->json(['eventinfo' => $event, 'invoices' => $invoices]);
