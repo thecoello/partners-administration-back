@@ -32,8 +32,8 @@ $router->group(['prefix' => '/'], function () use ($router) {
     $router->get('/api/invoices/search/{search}',  ['uses' => 'InvoiceController@getInvoicesSearch']);
     $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoice']);
     $router->post('/api/invoices',  ['uses' => 'InvoiceController@postInvoice']);
-    $router->put('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
-    $router->put('/api/invoices/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
+    $router->post('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
+    $router->post('/api/invoices/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
     $router->delete('/api/invoices/{id}',  ['uses' => 'InvoiceController@deleteInvoices']);
 
     //PACKGES
@@ -51,4 +51,10 @@ $router->group(['prefix' => '/'], function () use ($router) {
     //EVENT INFO
     $router->get('/api/eventinfo',  ['uses' => 'EventController@showAllEvents']);
     $router->get('/api/puteventinfo/{id}',  ['uses' => 'EventController@updateEvent']);
+
+    //STAND INFORMATION
+    $router->post('/api/standinformation/{id}',  ['uses' => 'StandInformationController@postStandInfo']);
+    $router->get('/api/standinformation/{id}',  ['uses' => 'StandInformationController@getStandInfo']);
+    $router->post('/api/standinformation/{id}',  ['uses' => 'StandInformationController@putStandInfo']);
+
 });
