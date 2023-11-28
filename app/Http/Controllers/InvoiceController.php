@@ -217,7 +217,8 @@ class InvoiceController extends Controller
             $iva =  (((float)$price * (int)$eventInfo[0]->iva) / 100);
             $_request['iva'] = $iva;
             $_request['total'] = (float)$price + $iva;
-        } else {
+        }  else {
+            $_request['iva'] = $iva;
             $_request['total'] = (float)$price;
         }
 

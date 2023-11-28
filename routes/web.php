@@ -53,8 +53,8 @@ $router->group(['prefix' => '/'], function () use ($router) {
     $router->get('/api/puteventinfo/{id}',  ['uses' => 'EventController@updateEvent']);
 
     //STAND INFORMATION
-    $router->post('/api/standinformation/{id}',  ['uses' => 'StandInformationController@postStandInfo']);
+    $router->post('/api/standinformation/',  ['uses' => 'StandInformationController@postStandInfo']);
     $router->get('/api/standinformation/{id}',  ['uses' => 'StandInformationController@getStandInfo']);
-    $router->post('/api/standinformation/{id}',  ['uses' => 'StandInformationController@putStandInfo']);
+    $router->post('/api/standinformationput/{id}',  ['uses' => 'StandInformationController@putStandInfo']);
 
 });
