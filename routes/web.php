@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-$router->group(['prefix' => '/'], function () use ($router) {
+$router->post('/api/login',  ['uses' => 'LoginController@postLogin']);
+
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
 
     //USERS
     $router->get('/api/users',  ['uses' => 'UsersController@getUsers']);
@@ -38,23 +41,20 @@ $router->group(['prefix' => '/'], function () use ($router) {
 
     //PACKGES
     $router->get('/api/packages',  ['uses' => 'PackagesController@getPackages']);
-    $router->post('/api/packages',  ['uses' => 'PackagesController@postPackages']);
     $router->put('/api/packages/{id}',  ['uses' => 'PackagesController@updatePackages']);
-    $router->delete('/api/packages/{id}',  ['uses' => 'PackagesController@deletePackages']);
 
     //LOCATIONS
     $router->get('/api/locations',  ['uses' => 'LocationsController@getLocations']);
-    $router->post('/api/locations',  ['uses' => 'LocationsController@postLocations']);
     $router->put('/api/locations/{id}',  ['uses' => 'LocationsController@updateLocations']);
-    $router->delete('/api/locations/{id}',  ['uses' => 'LocationsController@deleteLocations']);
 
     //EVENT INFO
     $router->get('/api/eventinfo',  ['uses' => 'EventController@showAllEvents']);
-    $router->get('/api/puteventinfo/{id}',  ['uses' => 'EventController@updateEvent']);
+    $router->put('/api/eventinfo',  ['uses' => 'EventController@updateEvent']);
 
     //STAND INFORMATION
-    $router->post('/api/standinformation/',  ['uses' => 'StandInformationController@postStandInfo']);
+    $router->post('/api/standinformation',  ['uses' => 'StandInformationController@postStandInfo']);
     $router->get('/api/standinformation/{id}',  ['uses' => 'StandInformationController@getStandInfo']);
     $router->post('/api/standinformationput/{id}',  ['uses' => 'StandInformationController@putStandInfo']);
-
 });
+
+

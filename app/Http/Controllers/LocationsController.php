@@ -8,29 +8,23 @@ class LocationsController extends Controller
 {
     public function getLocations()
     {
-        $result = DB::table('locations')->select('*')->get();
-        return $result;
-    }
-
-    public function postLocations(Request $request)
-    {
-        $this->validate($request, [
-            "location_name" => "required",
-        ]);
-
-        $result = DB::table('locations')->insert($request->all());
-        return $result;
+        return DB::table('locations')->get();
     }
 
     public function updateLocations($id, Request $request)
     {
-        $result = DB::table('locations')->where('id', $id)->update(request()->all());
-        return $result;
+        $locationsUpdate = DB::table('locations')->where('id', $id)->update($request->all());
+        $allLocations = [];
+        $location1 = DB::table('locations')->where('id',1)->get()[0]->location_name;
+        $location2 = DB::table('locations')->where('id',2)->get()[0]->location_name;
+        $location3 = DB::table('locations')->where('id',3)->get()[0]->location_name;
+        $allLocations["location_name"] = $location1 . '+' . $location2 . '+' . $location3;
+        $allLocationsUpdate = DB::table('locations')->where('id', 4)->update($allLocations);
+
+        if($locationsUpdate && $allLocationsUpdate){
+            return $allLocationsUpdate;
+        }
+         
     }
 
-    public function deleteLocations($id)
-    {
-        $result = DB::table('locations')->delete($id);
-        return $result;
-    }
 }

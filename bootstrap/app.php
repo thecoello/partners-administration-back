@@ -74,9 +74,9 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+ $app->middleware([
+    App\Http\Middleware\ExampleMiddleware::class
+ ]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
@@ -86,13 +86,6 @@ $app->routeMiddleware([
     App\Http\Middleware\CorsMiddleware::class,
 ]); 
 
-$app->singleton(Illuminate\Session\SessionManager::class, function () use ($app) {
-    return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session');
-});
-
-$app->singleton('session.store', function () use ($app) {
-    return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session.store');
-});
 
 
 /*

@@ -15,33 +15,13 @@ class PackagesController extends Controller
         $packs = DB::table('packages')->select('*')->get();
         $locations = DB::table('locations')->select('*')->get();
 
-        $result = ['packinfo'=>$packs, 'locations'=>$locations];
-        return $result;
-    }
-
-    public function postPackages(Request $request)
-    {
-        $this->validate($request, [
-            "pack_name" => "required",
-            "price_normal" => "required",
-            "price_early" => "required",
-            "price_all_normal" => "required",
-            "price_all_early" => "required",
-        ]);
-
-        $result = DB::table('packages')->insert($request->all());
-        return $result;
+        return['packinfo'=>$packs, 'locations'=>$locations];
     }
 
     public function updatePackages($id, Request $request)
     {
-        $result = DB::table('packages')->where('id', $id)->update(request()->all());
-        return $result;
+        return DB::table('packages')->where('id', $id)->update($request->all());
     }
 
-    public function deletePackages($id)
-    {
-        $result = DB::table('packages')->delete($id);
-        return $result;
-    }
+  
 }
