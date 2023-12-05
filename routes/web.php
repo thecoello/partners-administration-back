@@ -29,14 +29,18 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('/api/users', ['uses' => 'UsersController@postUser']);
     $router->put('/api/users/{id}', ['uses' => 'UsersController@updateUser']);
     $router->delete('/api/users/{id}', ['uses' => 'UsersController@deteleUser']);
+    $router->get('/api/authuser',  ['uses' => 'LoginController@getAuthUser']);
 
+    
     //INVOICES
     $router->get('/api/invoices/',  ['uses' => 'InvoiceController@getInvoices']);
     $router->get('/api/invoices/search/{search}',  ['uses' => 'InvoiceController@getInvoicesSearch']);
-    $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoice']);
-    $router->post('/api/invoices',  ['uses' => 'InvoiceController@postInvoice']);
-    $router->post('/api/invoices/{id}',  ['uses' => 'InvoiceController@putInvoices']);
-    $router->post('/api/invoices/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
+    $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoicesByUser']);
+    $router->get('/api/invoice/{id}',  ['uses' => 'InvoiceController@getInvoice']);
+
+    $router->post('/api/invoice',  ['uses' => 'InvoiceController@postInvoice']);
+    $router->post('/api/invoice/{id}',  ['uses' => 'InvoiceController@putInvoices']);
+    $router->post('/api/invoice/user/{id}',  ['uses' => 'InvoiceController@putInvoicesUser']);
     $router->delete('/api/invoices/{id}',  ['uses' => 'InvoiceController@deleteInvoices']);
 
     //PACKGES

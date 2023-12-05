@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 
 class UsersController extends Controller
@@ -49,6 +51,7 @@ class UsersController extends Controller
             "email" => $request->email,
             "password" => Hash::make($request->password),
             "user_type" => $request->user_type,
+            "user_token" => Str::random(64)
         ];
 
         $result = DB::table("users")->insert($userRequest);
@@ -57,8 +60,13 @@ class UsersController extends Controller
 
     public function updateUser($id, Request $request)
     {
-        $request["password"] = Hash::make($request->password);
+
+        if( $request->password){
+            $request["password"] = Hash::make($request->password);
+        }
+
         $result = DB::table("users")->where("id", $id)->update(request()->all());
+
         return $result;
     }
 

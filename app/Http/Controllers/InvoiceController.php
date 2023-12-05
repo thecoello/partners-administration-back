@@ -45,11 +45,49 @@ class InvoiceController extends Controller
         }
     }
 
+    public function getInvoicesByUser($id)
+    {
+        $event = DB::table('eventinfos')->get();
+
+        $invoices =  DB::table('invoices')->where('invoices.user_id', 'like', $id)->leftJoin('packages', 'invoices.category', '=', 'packages.id')->leftJoin('users', 'invoices.user_id', '=', 'users.id')->leftJoin('locations', 'invoices.location', '=', 'locations.id')->select(
+            "invoices.id",
+            "invoices.user_id",
+            "pricetype",
+            "company_name",
+            "category",
+            "location",
+            "quantity",
+            "vat",
+            "subtotal",
+            "iva",
+            "total",
+            "address",
+            "zip",
+            "country",
+            "invoice_number",
+            "payment_status",
+            "payment_method",
+            "invoice_date",
+            "name",
+            "contact",
+            "email",
+            "contract_file",
+            "coupons",
+            "voucher"
+        )->orderBy('invoices.invoice_number', 'asc')->simplePaginate(15);
+
+        if ($event && $invoices) {
+            return response()->json(['eventinfo' => $event, 'invoices' => $invoices]);
+        } else {
+            return response()->json("Error obteniendo invoices");
+        }
+    }
+
     public function getInvoice($id)
     {
         $event = DB::table('eventinfos')->get();
 
-        $invoices =  DB::table('invoices')->where('invoices.id', '=', $id)->leftJoin('packages', 'invoices.category', '=', 'packages.id')->leftJoin('users', 'invoices.user_id', '=', 'users.id')->leftJoin('locations', 'invoices.location', '=', 'locations.id')->select(
+        $invoices =  DB::table('invoices')->where('invoices.id', 'like', $id)->leftJoin('packages', 'invoices.category', '=', 'packages.id')->leftJoin('users', 'invoices.user_id', '=', 'users.id')->leftJoin('locations', 'invoices.location', '=', 'locations.id')->select(
             "invoices.id",
             "invoices.user_id",
             "pricetype",
