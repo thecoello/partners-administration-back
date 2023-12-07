@@ -8,6 +8,16 @@ use stdClass;
 
 class StandInformationController extends Controller
 {
+
+
+    public function getStandsInfo()
+    {
+        $standInformation = DB::table('standsinformation')->leftJoin('invoices','invoices.id', '=', 'standsinformation.invoice_id')->get();
+               
+        return $standInformation;
+  
+    }
+
     public function getStandInfo($id)
     {
         $locations = DB::table('locations')->get();

@@ -3,6 +3,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use InvoicesExport;
+use Maatwebsite\Excel\Excel as ExcelExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
@@ -43,6 +46,12 @@ class InvoiceController extends Controller
         } else {
             return response()->json("Error obteniendo invoices");
         }
+    }
+
+
+    public function getInvoicesExcel()
+    {    
+        return DB::table('invoices')->get(); 
     }
 
     public function getInvoicesByUser($id)

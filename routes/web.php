@@ -34,6 +34,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     //INVOICES
     $router->get('/api/invoices/',  ['uses' => 'InvoiceController@getInvoices']);
+    $router->get('/api/invoices/excel',  ['uses' => 'InvoiceController@getInvoicesExcel']);
     $router->get('/api/invoices/search/{search}',  ['uses' => 'InvoiceController@getInvoicesSearch']);
     $router->get('/api/invoices/{id}',  ['uses' => 'InvoiceController@getInvoicesByUser']);
     $router->get('/api/invoice/{id}',  ['uses' => 'InvoiceController@getInvoice']);
@@ -57,6 +58,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     //STAND INFORMATION
     $router->post('/api/standinformation',  ['uses' => 'StandInformationController@postStandInfo']);
+    $router->get('/api/standsinformation/',  ['uses' => 'StandInformationController@getStandsInfo']);
     $router->get('/api/standinformation/{id}',  ['uses' => 'StandInformationController@getStandInfo']);
     $router->post('/api/standinformationput/{id}',  ['uses' => 'StandInformationController@putStandInfo']);
 });

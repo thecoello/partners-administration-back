@@ -60,12 +60,15 @@ class UsersController extends Controller
 
     public function updateUser($id, Request $request)
     {
+        $_request = request()->all();
 
-        if( $request->password){
-            $request["password"] = Hash::make($request->password);
+        if($request->password != ''){
+            $_request["password"] = Hash::make($request->password);
+        }else{
+            unset($_request['password']);
         }
 
-        $result = DB::table("users")->where("id", $id)->update(request()->all());
+        $result = DB::table("users")->where("id", $id)->update($_request);
 
         return $result;
     }

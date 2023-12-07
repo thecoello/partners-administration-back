@@ -32,6 +32,7 @@ class LoginController extends Controller
     public function getAuthUser(){
         $user['id'] = Auth::user()->id;
         $user['user_type'] = Auth::user()->user_type;
+        $user['name'] = Auth::user()->name;
         return $user;
     }
 }
