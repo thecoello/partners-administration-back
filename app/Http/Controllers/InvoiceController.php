@@ -134,7 +134,7 @@ class InvoiceController extends Controller
     {
         $event = DB::table('eventinfos')->get();
 
-        $invoices =  DB::table('invoices')->where('invoices.invoice_number', '!=', 'null')->leftJoin('packages', 'invoices.category', '=', 'packages.id')->leftJoin('users', 'invoices.user_id', '=', 'users.id')->leftJoin('locations', 'invoices.location', '=', 'locations.id')->orderBy('invoices.invoice_number', 'asc')->where('invoices.company_name', 'like', '%' . $search . '%')->orWhere('invoices.invoice_number', 'like', '%' . $search . '%')->select(
+        $invoices =  DB::table('invoices')->where('invoices.invoice_number', '!=', 'null')->leftJoin('packages', 'invoices.category', '=', 'packages.id')->leftJoin('users', 'invoices.user_id', '=', 'users.id')->leftJoin('locations', 'invoices.location', '=', 'locations.id')->orderBy('invoices.invoice_number', 'asc')->where('invoices.company_name', 'like', '%' . $search . '%')->orWhere('invoices.invoice_number', 'like', '%' . $search . '%')->orWhere('contact', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%')->select(
             "invoices.id",
             "invoices.user_id",
             "pricetype",

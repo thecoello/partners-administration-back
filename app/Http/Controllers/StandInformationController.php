@@ -23,9 +23,10 @@ class StandInformationController extends Controller
         $locations = DB::table('locations')->get();
         $invoice = DB::table('invoices')->where('invoices.id', '=', $id)->get();
         $standInformation = DB::table('standsinformation')->where('standsinformation.invoice_id', '=', $id)->get();
+        $user = DB::table('users')->where('users.id', '=', $invoice[0]->user_id)->get();
 
         if ($locations && $invoice) {
-            return response()->json(['locations' => $locations, 'invoice' => $invoice, 'standinformation' => $standInformation]);
+            return response()->json(['locations' => $locations, 'invoice' => $invoice, 'standinformation' => $standInformation, 'user' =>  $user]);
         } else {
             return response()->json("Error obteniendo invoices");
         }

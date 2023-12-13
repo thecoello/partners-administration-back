@@ -55,6 +55,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     //EVENT INFO
     $router->get('/api/eventinfo',  ['uses' => 'EventController@showAllEvents']);
     $router->put('/api/eventinfo',  ['uses' => 'EventController@updateEvent']);
+    $router->post('/api/resetevent',  ['uses' => 'EventController@resetEvent']);
 
     //STAND INFORMATION
     $router->post('/api/standinformation',  ['uses' => 'StandInformationController@postStandInfo']);
