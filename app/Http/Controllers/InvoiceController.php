@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use InvoicesExport;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\MailController;
 
 class InvoiceController extends Controller
 {
@@ -205,7 +206,17 @@ class InvoiceController extends Controller
         $_request["invoice_number"] = $eventInfo[0]->invoice_pre . str_pad($eventInfo[0]->invoice_number, 3, '0', STR_PAD_LEFT);
 
         DB::table('eventinfos')->update(array('invoice_number' => ($eventInfo[0]->invoice_number + 1)));
-        return DB::table('invoices')->insert($_request);
+
+        $createInvoice = DB::table('invoices')->insert($_request);
+        $mail = new MailController();
+
+        if($createInvoice){
+            $user = DB::table('users')->where('id', $request->user_id)->first('*');
+            $mail->invoiceAvailable($_request["invoice_number"], $user);
+            return $createInvoice;
+        }
+
+
     }
 
     public function putInvoices($id, Request $request)
@@ -215,9 +226,12 @@ class InvoiceController extends Controller
         $price = 0;
         $country = '';
         $iva = 0;
+        $invoice = DB::table('invoices')->where('id', $id)->get()->all()[0];
+        $user = DB::table('users')->where('id', $invoice->user_id)->get()->all()[0];
 
-        $request->subtotal ? $price = $request->subtotal : $price =  floatval(DB::table('invoices')->where('id', $id)->get('subtotal')[0]->subtotal);
-        $request->country ? $country = $request->country : $country =  DB::table('invoices')->where('id', $id)->get('country')[0]->country;
+
+        $request->subtotal ? $price = $request->subtotal : $price =  floatval($invoice->subtotal);
+        $request->country ? $country = $request->country : $country =  $invoice->country;
 
         if ($country === "Spain") {
             $iva =  (((float)$price * (int)$eventInfo[0]->iva) / 100);
@@ -236,6 +250,9 @@ class InvoiceController extends Controller
         if($request->hasFile('voucher')){
             $request->file('voucher')->move('public/vouchers/', time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName());
             $_request['voucher'] = 'public/vouchers/'. time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName();
+
+            $mail = new MailController();
+            $mail->proofOfPayment($invoice, $user);
         }     
         
         return DB::table('invoices')->where('id', $id)->update($_request);
@@ -256,9 +273,12 @@ class InvoiceController extends Controller
         $price = 0;
         $country = '';
         $iva = 0;
+        $invoice = DB::table('invoices')->where('id', $id)->get()->all()[0];
+        $user = DB::table('users')->where('id', $invoice->user_id)->get()->all()[0];
 
-        $request->subtotal ? $price = $request->subtotal : $price =  floatval(DB::table('invoices')->where('id', $id)->get('subtotal')[0]->subtotal);
-        $request->country ? $country = $request->country : $country =  DB::table('invoices')->where('id', $id)->get('country')[0]->country;
+
+        $request->subtotal ? $price = $request->subtotal : $price =  floatval($invoice->subtotal);
+        $request->country ? $country = $request->country : $country =  $invoice->country;
 
         if ($country === "Spain") {
             $iva =  (((float)$price * (int)$eventInfo[0]->iva) / 100);
@@ -272,6 +292,9 @@ class InvoiceController extends Controller
         if($request->hasFile('voucher')){
             $request->file('voucher')->move('public/vouchers/', time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName());
             $_request['voucher'] = 'public/vouchers/'. time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName();
+
+            $mail = new MailController();
+            $mail->proofOfPayment($invoice, $user);
         }    
 
         return DB::table('invoices')->where('id', $id)->update($_request);

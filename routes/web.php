@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 $router->post('/api/login',  ['uses' => 'LoginController@postLogin']);
-
+$router->put('/api/resetpass',  ['uses' => 'LoginController@resetPassword']);
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
 

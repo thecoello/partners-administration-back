@@ -6,8 +6,11 @@
     "type": "project",
     "require": {
         "php": "^8.0",
+        "biscolab/laravel-recaptcha": "^6.0",
         "dusterio/lumen-passport": "^0.3.6",
-        "laravel/lumen-framework": "^9.0",
+        "google/recaptcha": "^1.2",
+        "illuminate/mail": "^10.37",
+        "laravel/lumen-framework": "^10.0",
         "maatwebsite/excel": "^3.1",
         "vlucas/phpdotenv": "^5.5"
     },
@@ -39,6 +42,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
