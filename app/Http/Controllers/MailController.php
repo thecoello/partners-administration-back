@@ -10,7 +10,7 @@ class MailController
   {
     $data = [
       'no-reply' => env('MAIL_FROM_ADDRESS'),
-      'email'    => [env('ADMIN_PRINCIPAL_EMAIL')],
+      'email'    => env('ADMIN_PRINCIPAL_EMAIL'),
       'name'    => $user->name,
       'invoice'    => $invoice->invoice_number,
       'company'    => $user->contact,
@@ -33,6 +33,7 @@ class MailController
       'email'    => $user->email,
       'name'    => $user->name,
       'invoice'    => $invoiceNumber,
+      'year' =>  date("Y") + 1
     ];
     Mail::send(
       'mailinvoice',
@@ -44,6 +45,26 @@ class MailController
       }
     );
   }
+
+  public function invoicePayed($invoiceNumber, $user)
+  {
+    $data = [
+      'no-reply' => env('MAIL_FROM_ADDRESS'),
+      'email'    => $user->email,
+      'name'    => $user->name,
+      'invoice'    => $invoiceNumber,
+    ];
+    Mail::send(
+      'invoicepayed',
+      ['data' => $data],
+      function ($message) use ($data) {
+        $message
+          ->from($data['no-reply'])
+          ->to($data['email'])->subject('Hi, '. $data['name'] .' your invoice has been marked as paid');
+      }
+    );
+  }
+
 
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -51,8 +52,8 @@ class InvoiceController extends Controller
 
 
     public function getInvoicesExcel()
-    {    
-        return DB::table('invoices')->get(); 
+    {
+        return DB::table('invoices')->get();
     }
 
     public function getInvoicesByUser($id)
@@ -172,6 +173,7 @@ class InvoiceController extends Controller
     public function postInvoice(Request $request)
     {
         $eventInfo = DB::table('eventinfos')->get();
+        $user = DB::table('users')->where('id', $request->user_id)->first('*');
         $iva = 0;
 
         $this->validate($request, [
@@ -193,14 +195,14 @@ class InvoiceController extends Controller
             $_request['total'] = (float)$request->subtotal;
         }
 
-        if($request->file('contract_file')){
-            $request->file('contract_file')->move('public/contracts/', time() . '_' .'contract'. '_' . $request->file('contract_file')->getClientOriginalName());
-            $_request['contract_file'] = 'public/contracts/'. time() . '_' .'contract'. '_' . $request->file('contract_file')->getClientOriginalName();
+        if ($request->file('contract_file')) {
+            $request->file('contract_file')->move('public/contracts/', time() . '_' . 'contract' . '_' . $request->file('contract_file')->getClientOriginalName());
+            $_request['contract_file'] = 'public/contracts/' . time() . '_' . 'contract' . '_' . $request->file('contract_file')->getClientOriginalName();
         }
 
-        if($request->file('voucher')){
-            $request->file('voucher')->move('public/vouchers/', time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName());
-            $_request['voucher'] = 'public/vouchers/'. time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName();
+        if ($request->file('voucher')) {
+            $request->file('voucher')->move('public/vouchers/', time() . '_' . 'voucher' . '_' . $request->file('voucher')->getClientOriginalName());
+            $_request['voucher'] = 'public/vouchers/' . time() . '_' . 'voucher' . '_' . $request->file('voucher')->getClientOriginalName();
         }
 
         $_request["invoice_number"] = $eventInfo[0]->invoice_pre . str_pad($eventInfo[0]->invoice_number, 3, '0', STR_PAD_LEFT);
@@ -210,13 +212,10 @@ class InvoiceController extends Controller
         $createInvoice = DB::table('invoices')->insert($_request);
         $mail = new MailController();
 
-        if($createInvoice){
-            $user = DB::table('users')->where('id', $request->user_id)->first('*');
+        if ($createInvoice) {
             $mail->invoiceAvailable($_request["invoice_number"], $user);
             return $createInvoice;
         }
-
-
     }
 
     public function putInvoices($id, Request $request)
@@ -228,6 +227,7 @@ class InvoiceController extends Controller
         $iva = 0;
         $invoice = DB::table('invoices')->where('id', $id)->get()->all()[0];
         $user = DB::table('users')->where('id', $invoice->user_id)->get()->all()[0];
+        $mail = new MailController();
 
 
         $request->subtotal ? $price = $request->subtotal : $price =  floatval($invoice->subtotal);
@@ -242,20 +242,28 @@ class InvoiceController extends Controller
             $_request['total'] = (float)$price;
         }
 
-        if($request->hasFile('contract_file')){
-            $request->file('contract_file')->move('public/contracts/', time() . '_' .'contract'. '_' . $request->file('contract_file')->getClientOriginalName());
-            $_request['contract_file'] = 'public/contracts/'. time() . '_' .'contract'. '_' . $request->file('contract_file')->getClientOriginalName();
+        if ($request->hasFile('contract_file')) {
+            $request->file('contract_file')->move('public/contracts/', time() . '_' . 'contract' . '_' . $request->file('contract_file')->getClientOriginalName());
+            $_request['contract_file'] = 'public/contracts/' . time() . '_' . 'contract' . '_' . $request->file('contract_file')->getClientOriginalName();
         }
 
-        if($request->hasFile('voucher')){
-            $request->file('voucher')->move('public/vouchers/', time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName());
-            $_request['voucher'] = 'public/vouchers/'. time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName();
+        if ($request->hasFile('voucher')) {
+            $request->file('voucher')->move('public/vouchers/', time() . '_' . 'voucher' . '_' . $request->file('voucher')->getClientOriginalName());
+            $_request['voucher'] = 'public/vouchers/' . time() . '_' . 'voucher' . '_' . $request->file('voucher')->getClientOriginalName();
+        }
 
-            $mail = new MailController();
+        $invoiceUpdated = DB::table('invoices')->where('id', $id)->update($_request);
+
+        if ($request->payment_status == "Payed" && $invoice->payment_status != "Payed") {
+            $mail->invoicePayed($invoice->invoice_number, $user);
+        }
+
+        if ($invoiceUpdated && $request->hasFile('voucher')) {
             $mail->proofOfPayment($invoice, $user);
-        }     
-        
-        return DB::table('invoices')->where('id', $id)->update($_request);
+            return $invoiceUpdated;
+        }
+
+        return $invoiceUpdated;
     }
 
     public function putInvoicesUser($id, Request $request)
@@ -275,7 +283,7 @@ class InvoiceController extends Controller
         $iva = 0;
         $invoice = DB::table('invoices')->where('id', $id)->get()->all()[0];
         $user = DB::table('users')->where('id', $invoice->user_id)->get()->all()[0];
-
+        $mail = new MailController();
 
         $request->subtotal ? $price = $request->subtotal : $price =  floatval($invoice->subtotal);
         $request->country ? $country = $request->country : $country =  $invoice->country;
@@ -284,19 +292,27 @@ class InvoiceController extends Controller
             $iva =  (((float)$price * (int)$eventInfo[0]->iva) / 100);
             $_request['iva'] = $iva;
             $_request['total'] = (float)$price + $iva;
-        }  else {
+        } else {
             $_request['iva'] = $iva;
             $_request['total'] = (float)$price;
         }
 
-        if($request->hasFile('voucher')){
-            $request->file('voucher')->move('public/vouchers/', time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName());
-            $_request['voucher'] = 'public/vouchers/'. time() . '_' .'voucher'. '_' . $request->file('voucher')->getClientOriginalName();
+        if ($request->hasFile('voucher')) {
+            $request->file('voucher')->move('public/vouchers/', time() . '_' . 'voucher' . '_' . $request->file('voucher')->getClientOriginalName());
+            $_request['voucher'] = 'public/vouchers/' . time() . '_' . 'voucher' . '_' . $request->file('voucher')->getClientOriginalName();
+        }
 
-            $mail = new MailController();
+        $invoiceUpdated = DB::table('invoices')->where('id', $id)->update($_request);
+
+        if ($request->payment_status == "Payed" && $invoice->payment_status != "Payed") {
+            $mail->invoicePayed($invoice->invoice_number, $user);
+        }
+
+        if ($invoiceUpdated && $request->hasFile('voucher')) {
             $mail->proofOfPayment($invoice, $user);
-        }    
+            return $invoiceUpdated;
+        }
 
-        return DB::table('invoices')->where('id', $id)->update($_request);
+        return $invoiceUpdated;
     }
 }

@@ -58,8 +58,10 @@ class StandInformationController extends Controller
             $_request['document3'] = 'public/documents/'. time() . '_' .'document3'. '_' . $request->file('document3')->getClientOriginalName();
         }
 
-        print_r($_request);
-
+        if($request->file('photo')){
+            $request->file('photo')->move('public/photos/', time() . '_' .'photo'. '_' . $request->file('photo')->getClientOriginalName());
+            $_request['photo'] = 'public/photos/'. time() . '_' .'photo'. '_' . $request->file('photo')->getClientOriginalName();
+        }
 
         return DB::table('standsinformation')->insert($_request);
     }
@@ -87,6 +89,12 @@ class StandInformationController extends Controller
             $request->file('document3')->move('public/documents/', time() . '_' .'document3'. '_' . $request->file('document3')->getClientOriginalName());
             $_request['document3'] = 'public/documents/'. time() . '_' .'document3'. '_' . $request->file('document3')->getClientOriginalName();
         }
+
+        if($request->file('photo')){
+            $request->file('photo')->move('public/photos/', time() . '_' .'photo'. '_' . $request->file('photo')->getClientOriginalName());
+            $_request['photo'] = 'public/photos/'. time() . '_' .'photo'. '_' . $request->file('photo')->getClientOriginalName();
+        }
+
 
         return DB::table('standsinformation')->where('invoice_id', $id)->update($_request);
     }

@@ -275,21 +275,12 @@
                                     style="padding: 40px 40px 40px 40px; font-family: sans-serif; font-size: 14px; line-height: 25px; color: #000000;">
 
                                     <p>Dear {{ $data['name'] }}</p>
-                                    <p>Congratulations, you are now a <b>{{ $data['year'] }} SAP Partner Summit for SME Sponsor</b>.</p>
-                                    <p>You can access your user profile in the <b>SAP Partner Summit for SME Sponsor's Platform</b> in this link <a href="http://sponsorship.partnersummitforsme.com" target="_blank" rel="noopener noreferrer"><b>sponsorship.partnersummitforsme.com</b></a> with your email and password. </p>
 
-                                    <p>In this platform you can download your invoice(s) number <b>{{ $data['invoice'] }}</b>, access the venue and booth information and get your free registration coupon(s) related to your sponsorship. Please follow the instructions described on the home page. </p>
-
-                                    <p>To log in use your email <b>({{ $data['email'] }})</b> and your password. If you don't remember your password you can reset it in <a href="http://sponsorship.partnersummitforsme.com/#passwordrest" target="_blank" rel="noopener noreferrer"><b>this link</b></a> using the same email address.</p>
+                                    <p>Your invoice {{ $data['invoice'] }} has been marked as paid, now you can fill the information for the booth, app and the <span style="color: #ff0000">*</span>Breakout Session
 
                                     
-                                    <p>If you need any help or assistance please contact Michael Linares <a href="mailto:michael@tasman.es"><b>michael@tasman.es</b></a> </p>
-
-                                    <p>We look forward to welcoming you at the <b>SAP Partner Summit for SME {{ $data['year'] }}</b>  </p>
-
-                                
-                                    
-                                    
+                                    <p style="color: #ff0000">*The Breakout Session is only available for Gold, Silver and Bronze Sponsors</p>
+                             
                                 </td>
                             </tr>
                         </table>
