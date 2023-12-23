@@ -20,8 +20,7 @@ use Illuminate\Support\Facades\Auth;
 $router->post('/api/login',  ['uses' => 'LoginController@postLogin']);
 $router->put('/api/resetpass',  ['uses' => 'LoginController@resetPassword']);
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
-
+$router->group(['middleware' => ['auth']], function () use ($router) {
     //USERS
     $router->get('/api/users',  ['uses' => 'UsersController@getUsers']);
     $router->get('/api/users/search/{search}',  ['uses' => 'UsersController@getUserSearch']);
@@ -31,7 +30,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->delete('/api/users/{id}', ['uses' => 'UsersController@deteleUser']);
     $router->get('/api/authuser',  ['uses' => 'LoginController@getAuthUser']);
 
-    
+
     //INVOICES
     $router->get('/api/invoices/',  ['uses' => 'InvoiceController@getInvoices']);
     $router->get('/api/invoices/excel',  ['uses' => 'InvoiceController@getInvoicesExcel']);
@@ -59,9 +58,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     //STAND INFORMATION
     $router->post('/api/standinformation',  ['uses' => 'StandInformationController@postStandInfo']);
-    $router->get('/api/standsinformation/',  ['uses' => 'StandInformationController@getStandsInfo']);
+    $router->get('/api/standsinformation',  ['uses' => 'StandInformationController@getStandsInfo']);
     $router->get('/api/standinformation/{id}',  ['uses' => 'StandInformationController@getStandInfo']);
     $router->post('/api/standinformationput/{id}',  ['uses' => 'StandInformationController@putStandInfo']);
 });
-
-

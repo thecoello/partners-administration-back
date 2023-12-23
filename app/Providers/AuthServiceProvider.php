@@ -32,8 +32,8 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('api', function ($request) {
             
-            if($request->header('Authorization')){
-                $user = DB::table("users")->where("user_token", "like", $request->header('Authorization'))->first('*');
+            if($request->header('Authtoken')){
+                $user = DB::table("users")->where("user_token", "like", $request->header('Authtoken'))->first('*');
 
                 if($user){
                     return $user;

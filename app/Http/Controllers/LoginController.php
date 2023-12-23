@@ -20,8 +20,8 @@ class LoginController extends Controller
             $checkPass = Hash::check($request->password, $findUser->password);
 
             if ($checkPass) {
-                $token = $findUser->user_token;          
-                return  response(['Authorization' => $token, 'user_id'=>$findUser->id],200)->header('Authorization', $token);
+                $token = $findUser->user_token;    
+                return  response(['Authtoken' => $token, 'user_id'=>$findUser->id],200)->header('Authtoken', $token);
             } else {
                 return response()->json(['status' => 'fail'], 401);
             }
