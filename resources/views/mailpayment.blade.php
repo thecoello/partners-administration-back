@@ -278,7 +278,7 @@
                                     <h3 style="margin: 0">Contact:</h3>
                                     <p><b>Name: </b>{{ $data['name'] }} <br/>
                                     <b>Company: </b>{{ $data['company'] }} <br/>
-                                    <b>Email: </b>{{ $data['email'] }}</p>
+                                    <b>Email: </b>{{ $data['user_email'] }}</p>
                                 </td>
                             </tr>
                         </table>

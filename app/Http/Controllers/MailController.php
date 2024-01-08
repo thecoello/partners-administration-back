@@ -11,6 +11,7 @@ class MailController
     $data = [
       'no-reply' => env('MAIL_FROM_ADDRESS'),
       'email'    => env('ADMIN_PRINCIPAL_EMAIL'),
+      'user_email' => $user->email,
       'name'    => $user->name,
       'invoice'    => $invoice->invoice_number,
       'company'    => $user->contact,
@@ -61,6 +62,24 @@ class MailController
         $message
           ->from($data['no-reply'])
           ->to($data['email'])->subject('Hi, '. $data['name'] .' your invoice has been marked as paid');
+      }
+    );
+  }
+
+  public function passwordReset($user)
+  {
+    $data = [
+      'no-reply' => env('MAIL_FROM_ADDRESS'),
+      'email'    => $user->email,
+      'name'    => $user->name,
+    ];
+    Mail::send(
+      'passwordreseted',
+      ['data' => $data],
+      function ($message) use ($data) {
+        $message
+          ->from($data['no-reply'])
+          ->to($data['email'])->subject('Hi, '. $data['name'] .' your password has been changed');
       }
     );
   }

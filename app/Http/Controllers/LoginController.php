@@ -14,54 +14,68 @@ class LoginController extends Controller
 {
     public function postLogin(Request $request)
     {
-        $findUser = DB::table("users")->where("users.email", "like", $request->email)->first('*');
+        if (env('APP_KEY') == $request->header('AppKey')) {
 
-        if ($findUser) {
-            $checkPass = Hash::check($request->password, $findUser->password);
+            $findUser = DB::table("users")->where("users.email", "like", $request->email)->first('*');
 
-            if ($checkPass) {
-                $token = $findUser->user_token;    
-                return  response(['Authtoken' => $token, 'user_id'=>$findUser->id],200)->header('Authtoken', $token);
+            if ($findUser) {
+                $checkPass = Hash::check($request->password, $findUser->password);
+
+                if ($checkPass) {
+                    $token = $findUser->user_token;
+                    return  response(['Authtoken' => $token, 'user_id' => $findUser->id], 200)->header('Authtoken', $token);
+                } else {
+                    return response()->json(['status' => 'fail'], 401);
+                }
             } else {
-                return response()->json(['status' => 'fail'], 401);
+                return response()->json(['status' => 'user not found'], 404);
             }
-        } else {
-            return response()->json(['status' => 'user not found'], 404);
-        } 
+        }
     }
 
-    public function getAuthUser(){
+    public function getAuthUser(Request $request)
+    {
+        if (env('APP_KEY') == $request->header('AppKey')) {
         $user['id'] = Auth::user()->id;
         $user['user_type'] = Auth::user()->user_type;
         $user['name'] = Auth::user()->name;
         return $user;
+        }else{
+            return response()->json(['status' => 'Unauthorized'], 401);
+        }
     }
 
-    public function resetPassword(Request $request){
-        
-        $findUser = DB::table("users")->where("users.email", "like", $request->email)->first('*');
+    public function resetPassword(Request $request)
+    {
 
-        if($request->password == $request->passwordr){
+        if (env('APP_KEY') == $request->header('AppKey')) {
+            $mail = new MailController();
 
-            if($findUser){
-                $_request = request()->all();
-                unset($_request['passwordr']);
+            $findUser = DB::table("users")->where("users.email", "like", $request->email)->first('*');
 
-                if($request->password != ''){
-                    $_request["password"] = Hash::make($request->password);
+            if ($request->password == $request->passwordr) {
+
+                if ($findUser) {
+                    $_request = request()->all();
+                    unset($_request['passwordr']);
+
+                    if ($request->password != '') {
+                        $_request["password"] = Hash::make($request->password);
+                    }
+
+                    $resetpass = DB::table("users")->where("email", $request->email)->update($_request);
+
+                    if($resetpass){
+                        $mail->passwordReset($findUser);
+                        return Response()->json('User updated', 200);
+                    }
+
+                } else {
+                    return Response()->json('User does not exist', 401);
                 }
-                
-                DB::table("users")->where("email", $request->email)->update($_request);
-
-                return Response()->json('User updated',200);
-        
-            }else{
-                return Response()->json('User does not exist', 401);
+            } else {
+                return Response()->json('Password not the same', 401);
             }
-
-        }else{
-            return Response()->json('Password not the same', 401);
         }
-
     }
 }

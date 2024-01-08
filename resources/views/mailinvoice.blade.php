@@ -280,7 +280,7 @@
 
                                     <p>In this platform you can download your invoice(s) number <b>{{ $data['invoice'] }}</b>, access the venue and booth information and get your free registration coupon(s) related to your sponsorship. Please follow the instructions described on the home page. </p>
 
-                                    <p>To log in use your email <b>({{ $data['email'] }})</b> and your password. If you don't remember your password you can reset it in <a href="http://sponsorship.partnersummitforsme.com/#passwordrest" target="_blank" rel="noopener noreferrer"><b>this link</b></a> using the same email address.</p>
+                                    <p>To log in use your email <b>({{ $data['email'] }})</b> and your password. If you don't remember your password you can reset it in <a href="http://sponsorship.partnersummitforsme.com/?=passwordreset" target="_blank" rel="noopener noreferrer"><b>this link</b></a> using the same email address.</p>
 
                                     
                                     <p>If you need any help or assistance please contact Michael Linares <a href="mailto:michael@tasman.es"><b>michael@tasman.es</b></a> </p>

@@ -276,9 +276,9 @@
 
                                     <p>Dear {{ $data['name'] }}</p>
 
-                                    <p>Your invoice {{ $data['invoice'] }} has been marked as paid, now you can fill the information for the booth, app and the <b>*</b>Breakout Session in the SAP Partner Summit for SME Sponsor's Platform. Please, <a href="https://sponsorship.partnersummitforsme.com/" target="_blank" rel="noopener noreferrer">Click here</a>, Login and go to Booth information
-                                    
-                                    <p><b>*The Breakout Session is only available for Gold, Silver and Bronze Sponsors</b></p>
+                                    <p>Your password has been successfully reset, you can login <a href="https://sponsorship.partnersummitforsme.com/" target="_blank" rel="noopener noreferrer">in this link</a></p>
+                                
+                                    <p><b>If it was not you, please contact us a this email:</b> <a href="mailto:sponsorship@partnersummitforsme.com">support@partnersummitforsme.com</a></p>
                              
                                 </td>
                             </tr>
