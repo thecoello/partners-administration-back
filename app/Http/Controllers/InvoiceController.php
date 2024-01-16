@@ -53,7 +53,32 @@ class InvoiceController extends Controller
 
     public function getInvoicesExcel()
     {
-        return DB::table('invoices')->get();
+        return DB::table('invoices')->where('invoices.invoice_number', '!=', 'null')->leftJoin('packages', 'invoices.category', '=', 'packages.id')->leftJoin('users', 'invoices.user_id', '=', 'users.id')->leftJoin('locations', 'invoices.location', '=', 'locations.id')->select(
+            "invoices.id",
+            "invoices.user_id",
+            "pricetype",
+            "company_name",
+            "category",
+            "location",
+            "quantity",
+            "vat",
+            "subtotal",
+            "iva",
+            "total",
+            "address",
+            "zip",
+            "country",
+            "invoice_number",
+            "payment_status",
+            "payment_method",
+            "invoice_date",
+            "name",
+            "contact",
+            "email",
+            "contract_file",
+            "coupons",
+            "voucher"
+        )->orderBy('invoices.invoice_number', 'asc')->get();
     }
 
     public function getInvoicesByUser($id)
@@ -141,8 +166,8 @@ class InvoiceController extends Controller
             "invoices.user_id",
             "pricetype",
             "company_name",
-            "pack_name",
-            "location_name",
+            "category",
+            "location",
             "quantity",
             "vat",
             "subtotal",
