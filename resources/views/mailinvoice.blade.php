@@ -275,7 +275,7 @@
                                     style="padding: 40px 40px 40px 40px; font-family: sans-serif; font-size: 14px; line-height: 25px; color: #000000;">
 
                                     <p>Dear {{ $data['name'] }}</p>
-                                    <p>Congratulations, you are now a <b>{{ $data['year'] }} SAP Partner Summit for SME Sponsor</b>.</p>
+                                    <p>Congratulations, you are now a <b>SAP Partner Summit for SME Sponsor</b>.</p>
                                     <p>You can access your user profile in the <b>SAP Partner Summit for SME Sponsor's Platform</b> in this link <a href="http://sponsorship.partnersummitforsme.com" target="_blank" rel="noopener noreferrer"><b>sponsorship.partnersummitforsme.com</b></a> with your email and password. </p>
 
                                     <p>In this platform you can download your invoice(s) number <b>{{ $data['invoice'] }}</b>, access the venue and booth information and get your free registration coupon(s) related to your sponsorship. Please follow the instructions described on the home page. </p>
