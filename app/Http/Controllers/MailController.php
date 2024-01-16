@@ -34,7 +34,7 @@ class MailController
       'email'    => $user->email,
       'name'    => $user->name,
       'invoice'    => $invoiceNumber,
-      'year' =>  date("Y") + 1
+      'year' =>  date("Y")
     ];
     Mail::send(
       'mailinvoice',
